@@ -192,8 +192,13 @@ do_move(char *from, char *to)
 		} else
 			ask = 0;
         if (ask) {
-            if (!prompt_overwrite(to))
-                return (0);
+            if (iflg) {
+                if (!prompt_overwrite(to))
+                    return (0);
+            } else {
+                if (!read_yes_no_from_stdin())
+                    return (0);
+            }
         }
 	}
 

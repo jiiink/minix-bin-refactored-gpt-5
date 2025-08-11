@@ -59,6 +59,7 @@ __RCSID("$NetBSD: rm.c,v 1.53 2013/04/26 18:43:22 christos Exp $");
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "../common/common.h"
 
 static int dflag, eval, fflag, iflag, Pflag, stdin_ok, vflag, Wflag;
 static int xflag;
@@ -541,7 +542,6 @@ err:	eval = 1;
 static int
 check(char *path, char *name, struct stat *sp)
 {
-	int ch, first;
 	char modep[15];
 
 	/* Check -i first. */
@@ -569,12 +569,8 @@ check(char *path, char *name, struct stat *sp)
 		    user_from_uid(sp->st_uid, 0),
 		    group_from_gid(sp->st_gid, 0), path);
 	}
-	(void)fflush(stderr);
-
-	first = ch = getchar();
-	while (ch != '\n' && ch != EOF)
-		ch = getchar();
-	return (first == 'y' || first == 'Y');
+    (void)fflush(stderr);
+    return read_yes_no_from_stdin();
 }
 
 /*
